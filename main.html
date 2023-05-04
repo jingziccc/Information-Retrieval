@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title >Image Search Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <meta http-equiv='cache-control' content="no-cache, must-revalidate, post-check=0, pre-check=0">
+  <meta http-equiv='expires' content='0'>
+  <meta http-equiv='pragma' content='no-cache'>
+
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+  <scrip src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
+
+</head>
+
+<body style="background: linear-gradient(to left, #aee2f7, #eff8c6); background-size: cover;">
+
+
+  <div class="navbar" >
+  <div class="navbar-inner">
+    <h1 class="text-center" style="color:rgb(30, 66, 10);"><b>IMAGE SEARCH DEMO </b>&nbsp;&nbsp;&nbsp;<a class="navbar-brand"
+        href="">
+        <img src="/images/logo.svg" style="height:40px;"></a>
+    </h1>
+
+  </div>
+  </div>
+  <div><br></br><br></br>
+  </div>
+
+
+  <center></center>
+
+
+<div id="main" class="container">
+  <table class="table" style="background-color: transparent; border: 1px solid beige; box-shadow: 3px 5px 15px 0px rgba(0, 0, 0, 0.2), 3px 5px 15px 0 rgba(0, 0, 0, 0.19);">
+
+      <tr style="background: lightgrey;">
+        <td style="text-align: center;"><b>Choose your file to upload</b></td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>
+          <form method="post" enctype="multipart/form-data" onsubmit="return false;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center;">
+                <input type="file" name="file" required onchange="showPreviewImage(event)">
+                <input type="submit" value="Submit" style="display:none;">
+              </div>
+              <input type="submit" value="Search!" onclick="fun()">
+            </div>
+          </form>          
+        </td>
+      </tr>
+<style>
+  input[type="checkbox"] {
+    width: 30px; /* 设置选择框的宽度 */
+    height: 30px; /* 设置选择框的高度 */
+    margin-right: 10px; /* 添加一些间距 */
+  }
+  label {
+    display: flex; /* 使用弹性布局 */
+    align-items: center; /* 垂直居中 */
+    font-size: 25px; /* 设置字体大小为25像素 */
+  }  
+  span {
+    font-size: 20px;
+  }     
+  input[type="number"]{
+    height: 40px;
+    width: 40px
+  }
+</style>
+      <tr >
+        <td style="display:none"id = "checkboxs">
+          <div style="display:flex; flex-wrap: wrap;" >
+              <div style="margin-right: 10px;">
+                <label>
+                  <input type="checkbox" checked name="people">people
+                </label>
+              </div>
+              <div style="margin-right: 10px;">
+                <label>
+                  <input type="checkbox" checked name="animals">animals
+                </label>
+              </div>
+              <div style="margin-right: 10px;">
+                <label>
+                  <input type="checkbox" checked name="sky">sky
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input type="checkbox" checked name="architecture">architecture
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input type="checkbox" checked name="other">other
+                </label>
+              </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="display:none;text-align: center" id = "numberQuantity">
+          <div>
+            <span>数量：</span>
+            <button onclick="decreaseQuantity()">-</button>
+            <input type="number" id="quantity" name="quantity" min="1" max="15" value="15">
+            <button onclick="increaseQuantity()">+</button>
+          </div>
+        </td>
+      </tr>
+      <script>
+      function showPreviewImage(event) {
+        var previewImage = document.getElementById("previewImage");
+        previewImage.style.display = "block";
+        previewImage.src = URL.createObjectURL(event.target.files[0]);
+      }
+      </script>
+      
+      <tr id="row1" style="display:none;">
+        <td><a href=""><button id="clear" style="display:none;">Clear</button></a></td>
+        <td></td>
+
+      </tr>
+    </table>
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <table>
+        <tr>
+          <td style="text-align: center;">
+            <img id="previewImage" src="#" alt="Preview Image" style="display: none; max-height: 200px; margin: auto;">
+          </td>
+        </tr>
+      </table>
+    </div>
+<br \>  
+  </div>
+
+  <center>
+    <img id="load" src="/images/ajax-loader.gif" style="height:100px;weight:100px;display:none;">
+  </center>
+
+<style>
+  .image-box {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    width: 200px;
+    height: 200px;
+    padding: 0;
+    border: 1px solid white;
+  }
+  
+  .image-cell {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    width: 400px;
+    height: 200px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+    background: white;
+    object-fit: cover;
+    
+  }
+
+</style>
+
+<style>
+  .favorite-btn {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .favorite-btn.favorite-added {
+    background-color: red;
+    
+  }
+  
+  .image-wrapper {
+    position: relative;
+    page-break-after: always;
+  }
+  
+  .image-wrapper:hover .favorite-btn {
+    display: block;
+  }
+  
+
+  
+</style>
+
+<div id="main" class="container">
+  <table id="table" class="table" style ="display: none">
+    <tbody>
+      <script>
+        for (var i = 0; i < 15; i += 3) {
+          document.write('<tr>');
+          for (var j = 0; j < 3; j++) {
+            var index = i + j;
+            document.write(`
+              <td class="image-box">
+                <div class="image-wrapper">
+                  <img id="img${index}" src="" alt="Norway" class="image-cell" width="200" height="200">
+                  <div class="favorite-btn">
+                    ❤
+                  </div>
+                </div>
+              </td>
+            `);
+          }
+          document.write('</tr>');
+        }
+      </script>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .favorite-sidebar {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+    width: 200px;
+    height: 100vh;
+    background-color: #968b8b; /* 深褐色 */
+    border: 1px solid black;
+    padding: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* 阴影 */
+    overflow-y: scroll;
+  }
+  
+  .favorite-sidebar h2 {
+    text-align: center;
+    color: rgb(123, 19, 5); /* 修改标题文字颜色为红色 */
+  }
+  
+</style>
+
+<div class="favorite-sidebar">
+  <h2>❤</h2>
+  <ul id="favorite-list"></ul>
+</div>
+
+<script>
+  function decreaseQuantity() {
+    // 获取当前数量
+    let currentQuantity = parseInt(document.getElementById('quantity').value);
+    // 如果当前数量大于1，则减少数量并隐藏对应的图片
+    if (currentQuantity > 1) {
+      currentQuantity--;
+      document.getElementById('quantity').value = currentQuantity;
+      document.getElementById(`img${currentQuantity}`).style.display = 'none';
+    }
+  }
+  
+  function increaseQuantity() {
+    // 获取当前数量
+    let currentQuantity = parseInt(document.getElementById('quantity').value);
+    // 如果当前数量小于15，则增加数量并显示对应的图片
+    if (currentQuantity < 15) {
+      currentQuantity++;
+      document.getElementById('quantity').value = currentQuantity;
+      document.getElementById(`img${currentQuantity-1}`).style.display = 'block';
+      
+    }
+  }
+               
+  document.addEventListener('DOMContentLoaded', () => {
+    const favoriteBtns = document.querySelectorAll('.favorite-btn');
+    const favoriteList = document.getElementById('favorite-list');
+    
+    favoriteBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const imgSrc = btn.parentElement.querySelector('.image-cell').src;
+        
+        if (btn.classList.contains('favorite-added')) {
+          btn.classList.remove('favorite-added');
+          btn.innerText = '❤';
+          
+          // remove the image from favorite list
+          const imgToRemove = favoriteList.querySelector(`[src="${imgSrc}"]`);
+          if (imgToRemove) {
+            imgToRemove.parentElement.remove();
+          }
+        } else {
+          btn.classList.add('favorite-added');
+          btn.innerText = '❤';
+          
+          // add the image to favorite list
+          const imgElement = document.createElement('img');
+          imgElement.src = imgSrc;
+          const listItem = document.createElement('li');
+          listItem.appendChild(imgElement);
+          favoriteList.appendChild(listItem);
+        }
+      });
+    });
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    function myFunction() {
+      document.getElementById("predictedResult").innerHTML = "";
+      $('#clear').hide();
+    }
+    function fun() {
+      $('#table').hide();
+      $('#load').show();
+      $('#checkboxs').hide();
+      $('#numberQuantity').hide();
+      $("form").submit(function (evt) {
+        //$('#loader-icon').show(); 
+
+        evt.preventDefault();
+
+        //$('#loader-icon').show();
+        var formData = new FormData($(this)[0]);
+
+        $.ajax({
+          url: 'imgUpload',
+          type: 'POST',
+          data: formData,
+          //async: false,
+          cache: false,
+          contentType: false,
+          enctype: 'multipart/form-data',
+          processData: false,
+
+          success: function (response) {
+            $('#load').hide();
+            $('#row1').show();
+            //$('#clear').show();
+            //console.log(response[1]);
+            //document.getElementById("predictedResult").innerHTML= response; 
+            document.getElementById("img0").src = response.image0;
+            document.getElementById("img1").src = response.image1;
+            document.getElementById("img2").src = response.image2;
+            document.getElementById("img3").src = response.image3;
+            document.getElementById("img4").src = response.image4;
+            document.getElementById("img5").src = response.image5;
+            document.getElementById("img6").src = response.image6;
+            document.getElementById("img7").src = response.image7;
+            document.getElementById("img8").src = response.image8;
+            document.getElementById("img9").src = response.image9;
+            document.getElementById("img10").src = response.image10;
+            document.getElementById("img11").src = response.image11;
+            document.getElementById("img12").src = response.image12;
+            document.getElementById("img13").src = response.image13;
+            document.getElementById("img14").src = response.image14;
+            $('#table').show();
+            $('#clear').show();
+            $('#checkboxs').show();
+            $('#numberQuantity').show();
+          }
+        });
+        return false;
+      })
+      const favoriteBtns = document.querySelectorAll('.favorite-btn');
+      favoriteBtns.forEach(btn => {
+        btn.classList.remove('favorite-added');
+        
+      });
+    };
+
+
+  </script>
+</body>
+
+</html>
